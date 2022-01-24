@@ -5,7 +5,7 @@ FORCE_INKSCAPE="$(echo "${FORCE_INKSCAPE-False}" | tr '[:upper:]' '[:lower:]')"
 if [[ "${FORCE_INKSCAPE}" == "true" ]]; then
   RENDER_SVG=""
 else
-  RENDER_SVG="$(command -v rendersvg)" || true
+  RENDER_SVG="$(command -v rsvg-convert)" || true
 fi
 INKSCAPE="$(command -v inkscape)" || true
 OPTIPNG="$(command -v optipng)" || true
@@ -25,7 +25,7 @@ i="$1"
 echo "Rendering '$i.png'"
 
 if [[ -n "${RENDER_SVG}" ]]; then
-  "$RENDER_SVG" --dpi 96 "$i.svg" "$i.png"
+  "$RENDER_SVG" --dpi-x 96 --dpi-y 96 "$i.svg" -o "$i.png" || :
 else
   "$INKSCAPE" --export-dpi=96 "$EXPORT_FILE_OPTION=$i.png" "$i.svg" >/dev/null
 fi

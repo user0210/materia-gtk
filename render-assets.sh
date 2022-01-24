@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -ueo pipefail
 
-if [[ ! "$(command -v inkscape || command -v rendersvg)" ]]; then
-  echo "'inkscape' or 'resvg' needs to be installed to generate the PNG."
+if [[ ! "$(command -v inkscape || command -v rsvg-convert)" ]]; then
+  echo "'inkscape' or 'librsvg' needs to be installed to generate the PNG."
   exit 1
 fi
 

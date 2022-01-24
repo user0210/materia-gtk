@@ -95,7 +95,7 @@ for FILEPATH in "${PATHLIST[@]}"; do
 done
 
 OPTION_GTK2_HIDPI=$(tr '[:upper:]' '[:lower:]' <<< "${OPTION_GTK2_HIDPI-False}")
-OPTION_FORCE_INKSCAPE=$(tr '[:upper:]' '[:lower:]' <<< "${OPTION_FORCE_INKSCAPE-True}")
+OPTION_FORCE_INKSCAPE=$(tr '[:upper:]' '[:lower:]' <<< "${OPTION_FORCE_INKSCAPE-False}")
 
 
 if [[ "$THEME" == */* ]] || [[ "$THEME" == *.* ]]; then
@@ -143,7 +143,7 @@ TERMINAL_COLOR10=${TERMINAL_COLOR10:-00C853}
 TERMINAL_COLOR11=${TERMINAL_COLOR11:-FF6D00}
 TERMINAL_COLOR12=${TERMINAL_COLOR12:-66BB6A}
 
-TARGET_DIR=${TARGET_DIR-$HOME/.themes}
+TARGET_DIR=${TARGET_DIR-$HOME/.local/share/themes}
 OUTPUT_THEME_NAME=${OUTPUT_THEME_NAME-oomox-$THEME}
 DEST_PATH="$TARGET_DIR/${OUTPUT_THEME_NAME/\//-}"
 
@@ -300,6 +300,7 @@ fi
 echo "== Rendering GTK 3 assets..."
 FORCE_INKSCAPE="$OPTION_FORCE_INKSCAPE" ./render-assets.sh gtk
 
+rm -r _build || :
 meson _build -Dprefix="$tempdir" -Dcolors="$COLOR_VARIANT" -Dsizes="$SIZE_VARIANT"
 meson install -C _build
 GENERATED_PATH="$tempdir/share/themes/Materia$COLOR_SUFFIX$SIZE_SUFFIX"

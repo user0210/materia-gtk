@@ -5,7 +5,7 @@ FORCE_INKSCAPE="$(echo "${FORCE_INKSCAPE-False}" | tr '[:upper:]' '[:lower:]')"
 if [[ "${FORCE_INKSCAPE}" == "true" ]]; then
   RENDER_SVG=""
 else
-  RENDER_SVG="$(command -v rendersvg)" || true
+  RENDER_SVG="$(command -v rsvg-convert)" || true
 fi
 INKSCAPE="$(command -v inkscape)" || true
 OPTIPNG="$(command -v optipng)" || true
@@ -45,9 +45,11 @@ echo "Rendering '$ASSETS_DIR/$i.png'"
 if [[ -n "${RENDER_SVG}" ]]; then
   # @TODO: remove --zoom when it will be fixed/implemented in resvg
   "$RENDER_SVG" --export-id "$i" \
-    --dpi ${DPI} \
-    --zoom ${ZOOM} \
-    "$SRC_FILE" "$ASSETS_DIR/$i.png"
+    --dpi-x ${DPI} \
+    --dpi-y ${DPI} \
+    --x-zoom ${ZOOM} \
+    --y-zoom ${ZOOM} \
+    "$SRC_FILE" -o "$ASSETS_DIR/$i.png" || :
 else
   "$INKSCAPE" --export-id="$i" \
     --export-id-only \
