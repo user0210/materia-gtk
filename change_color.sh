@@ -82,15 +82,20 @@ PATHLIST=(
   './src/metacity-1'
   './src/unity'
   './src/xfwm4'
+  './src/qt5ct_palette.conf'
+  './src/qt6ct_palette.conf'
 )
 if [[ -n "${CUSTOM_PATHLIST:-}" ]]; then
   IFS=', ' read -r -a PATHLIST <<< "${CUSTOM_PATHLIST:-}"
 fi
 
 EXPORT_QT5CT=0
+EXPORT_QT6CT=0
 for FILEPATH in "${PATHLIST[@]}"; do
   if [[ "$FILEPATH" == *qt5ct* ]]; then
     EXPORT_QT5CT=1
+  elif [[ ${FILEPATH} == *qt6ct* ]] ;then
+    EXPORT_QT6CT=1
   fi
 done
 
@@ -236,8 +241,11 @@ for FILEPATH in "${PATHLIST[@]}"; do
     -e 's/%BG%/#'"$BG"'/g' \
     -e 's/%BG2%/#'"$(darker $BG)"'/g' \
     -e 's/%FG%/#'"$FG"'/g' \
+    -e 's/%TXT_BG%/#'"$TXT_BG"'/g' \
+    -e 's/%TXT_FG%/#'"$TXT_FG"'/g' \
     -e 's/%SEL_BG%/#'"$SEL_BG"'/g' \
     -e 's/%SEL_BG2%/#'"$(darker $SEL_BG -20)"'/g' \
+	-e 's/%SEL_FG%/#'"$SEL_FG"'/g' \
     -e 's/%MATERIA_VIEW%/#'"$MATERIA_VIEW"'/g' \
     -e 's/%HDR_BG%/#'"$HDR_BG"'/g' \
     -e 's/%HDR_BG2%/#'"$(darker $HDR_BG 10)"'/g' \
@@ -279,6 +287,13 @@ if [[ "$EXPORT_QT5CT" = 1 ]]; then
   qt5ct_colors_dir="$config_home/qt5ct/colors/"
   test -d "$qt5ct_colors_dir" || mkdir -p "$qt5ct_colors_dir"
   mv ./src/qt5ct_palette.conf "$qt5ct_colors_dir/$OUTPUT_THEME_NAME.conf"
+fi
+
+if [[ "$EXPORT_QT6CT" = 1 ]]; then
+  config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+  qt6ct_colors_dir="$config_home/qt6ct/colors/"
+  test -d "$qt6ct_colors_dir" || mkdir -p "$qt6ct_colors_dir"
+  mv ./src/qt6ct_palette.conf "$qt6ct_colors_dir/$OUTPUT_THEME_NAME.conf"
 fi
 
 if [[ "$MATERIA_STYLE_COMPACT" == "true" ]]; then
